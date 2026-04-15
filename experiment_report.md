@@ -1,8 +1,8 @@
 # Experiment Report: Data Quality Impact on AI Agent
 
-**Student ID:** AI20K-XXXX
-**Name:** (Dien ten cua ban)
-**Date:** (Dien ngay thuc hien)
+**Student ID:** AI20K-2A202600318
+**Name:** Trần Trung Hiếu
+**Date:** 2026-04-15
 
 ---
 
@@ -12,8 +12,8 @@ Chay `agent_simulation.py` voi 2 bo du lieu va ghi lai ket qua:
 
 | Scenario | Agent Response | Accuracy (1-10) | Notes |
 |----------|----------------|-----------------|-------|
-| Clean Data (`processed_data.csv`) | (Ghi cau tra loi cua Agent) | | |
-| Garbage Data (`garbage_data.csv`) | (Ghi cau tra loi cua Agent) | | |
+| Clean Data (`processed_data.csv`) | Agent: Based on my data, the best choice is Laptop at $1200. | 9 | Correct answer, clean data with valid prices and categories |
+| Garbage Data (`garbage_data.csv`) | Agent: Based on my data, the best choice is Nuclear Reactor at $999999. | 2 | Wrong answer due to extreme outlier in garbage data |
 
 ---
 
@@ -21,15 +21,22 @@ Chay `agent_simulation.py` voi 2 bo du lieu va ghi lai ket qua:
 
 ### Tai sao Agent tra loi sai khi dung Garbage Data?
 
-(Viet nhan xet cua ban o day — it nhat 50 tu)
+Khi su dung garbage data, agent tra loi sai vi du lieu dau vao chua nhieu van de chat luong nghiem trong.
 
-(Hay phan tich cac van de nhu Duplicate IDs, wrong data types, outliers, null values
-va giai thich tai sao chung anh huong den ket qua cua Agent.)
+Thu nhat, **Duplicate IDs**: garbage data chua hai ban ghi co cung id=1 (Laptop va Banana), khien agent khong biet ban ghi nao la chinh xac, gay nham lan khi tra cuu.
+
+Thu hai, **Wrong data types**: cot price cua "Broken Chair" la chuoi "ten dollars" thay vi so, khien pandas khong the so sanh gia tri chinh xac. Dieu nay dan den ket qua sai khi tinh toan hoac loc du lieu.
+
+Thu ba, **Extreme outliers**: ban ghi "Nuclear Reactor" co gia 999999, rat cao bat thuong. Khi agent tim san pham electronics co gia cao nhat, no tra ve "Nuclear Reactor" thay vi san pham co y nghia thuc te, khien ket qua tro nen vo nghia voi nguoi dung.
+
+Thu tu, **Null values**: ban ghi co id=None, price=0 va category=None gay loi trong qua trinh xu ly, khien agent co the bi crash hoac tra ve ket qua khong chinh xac.
+
+Tat ca nhung van de nay chung to rang du lieu rac gay ra ket qua sai lech nghiem trong, bat ke prompt co tot den dau.
 
 ---
 
 ## 3. Ket luan
 
-**Quality Data > Quality Prompt?** (Dong y hay khong? Giai thich ngan gon.)
+**Quality Data > Quality Prompt?** Dong y hoan toan.
 
-(Viet ket luan cua ban o day)
+Thi nghiem nay chung minh rang du lieu chat luong kem se dan den ket qua sai du AI agent duoc viet tot den dau. Nguyen tac GIGO (Garbage In, Garbage Out) rat ro rang: khi dua garbage data vao, agent tra ve "Nuclear Reactor at $999999" - mot ket qua hoan toan vo nghia. ETL pipeline voi validation chat che la buoc bat buoc de dam bao chat luong du lieu truoc khi dua vao he thong AI.
